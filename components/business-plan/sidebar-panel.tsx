@@ -133,7 +133,7 @@ export function SidebarPanel({
                             </p>
                         )}
                         {generationStep === 3 ? (
-                            <Card className="shrink-0 gap-4 p-4">
+                            <Card className="shrink-0 gap-3 p-3">
                                 <Skeleton className="h-4 w-24" />
                                 <Skeleton className="h-4 w-full" />
                                 <Skeleton className="h-4 w-4/5" />
@@ -161,9 +161,9 @@ export function SidebarPanel({
                                                     onIdeaSelect?.(idea)
                                                 }
                                             }}
-                                            className={`cursor-pointer gap-4 border border-border/70 bg-background/20 p-0 transition-all duration-200 ease-in-out hover:border-primary/40 hover:bg-secondary/40 focus-visible:ring-2 focus-visible:ring-ring ${isSelected ? 'border-primary/60 bg-primary/5' : ''}`}
+                                            className={`cursor-pointer gap-2 border border-border/70 bg-background/20 p-0 transition-all duration-200 ease-in-out hover:border-primary/40 hover:bg-secondary/40 focus-visible:ring-2 focus-visible:ring-ring ${isSelected ? 'border-primary/60 bg-primary/5' : ''}`}
                                         >
-                                            <CardTitle className="flex flex-col gap-2 bg-neutral-500/10 p-4 text-xs">
+                                            <CardTitle className="flex flex-col gap-2 bg-neutral-500/10 p-3 text-xs">
                                                 <div className="flex items-center justify-between gap-2">
                                                     <Badge variant="outline" className="bg-neutral-500/20 text-[11px]">
                                                         추천 아이디어
@@ -177,7 +177,7 @@ export function SidebarPanel({
                                                 </div>
                                                 <span>&quot;{idea.title}&quot;</span>
                                             </CardTitle>
-                                            <CardContent className="w-full flex-col p-4 pt-0">
+                                            <CardContent className="w-full flex-col px-3 pt-0 pb-3">
                                                 {idea.points.map((point) => (
                                                     <div key={point} className="-ml-2 flex w-full items-center gap-1 text-xs text-neutral-400">
                                                         <Dot className="min-w-6" />

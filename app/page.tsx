@@ -17,7 +17,6 @@ import {
     MessageSquareQuote,
     Network,
     Pencil,
-    RotateCcw,
     Save,
     Sparkles,
     Target,
@@ -54,7 +53,7 @@ type Action =
 const initialContent: Record<SectionKey, string> = {
     problem: '1인 가구와 직장인은 퇴근 후 무엇을 먹을지 결정하는 데 시간을 쓰고, 냉장고 속 식재료의 유통기한을 놓쳐 폐기합니다.',
     solution:
-        '냉장고 사진·바코드·수기 입력으로 식재료와 유통기한을 구조화하고, 남은 재료를 우선 소진하는 15분 맞춤형 레시피를 실시간 추천합니다. 부족한 필수 식재료는 1시간 퀵커머스 장바구니로 자동 큐레이션 연결하며, 사용자 알레르기·칼로리·보유 조리도구 조건까지 완벽하게 반영합니다.',
+        '냉장고 사진·바코드·수기 입력으로 식재료와 유통기한을 구조화하고, 남은 재료를 우선 소진하는 15분 맞춤형 레시피를 실시간 추천합니다. 부족한 필수 식재료는 1시간 퀵커머스 장바구니로 자동 큐레이션 연결하며, 사용자 알레르기·칼로리·보유 조리도구 조건까지 반영합니다. 초기 사용자 100명 인터뷰를 통해 문제와 추천 품질을 검증하고, 출시 30일 내 재사용률 40% 달성을 핵심 실행 지표로 설정합니다. MVP 단계에서 식재료 인식 정확도와 주문 전환율을 주 단위로 측정해 서비스 타당성을 입증합니다.',
     growth: '초기에는 식재료 절감 효과를 핵심 가치로 검증하고, 퀵커머스 제휴 수수료와 프리미엄 구독을 통해 수익성을 확보합니다.',
     team: '대표는 고객 인터뷰와 사업개발을 맡고, AI 엔지니어와 영양사 인력으로 추천 모델의 정확도와 서비스 신뢰도를 강화합니다.',
 }
@@ -97,7 +96,7 @@ const sectionMeta: Record<SectionKey, Omit<Section, 'content' | 'charCount' | 'h
 function makeSection(key: SectionKey): Section {
     const meta = sectionMeta[key]
     const content = initialContent[key]
-    return { ...meta, content, status: 'PENDING', charCount: content.length, history: [] }
+    return { ...meta, content, status: key === 'solution' ? 'IN_PROGRESS' : 'PENDING', charCount: content.length, history: [] }
 }
 
 const initialState: State = {
@@ -189,7 +188,7 @@ function CanvasCard({ section, active, onClick }: { section: Section; active: bo
     return (
         <button type="button" onClick={onClick} className="w-full text-left">
             <Card
-                className={`gap-4 border-border/70 p-4 transition-all duration-200 ease-in-out hover:border-primary/50 ${active ? 'border-primary/60 bg-primary/5 shadow-md shadow-primary/5' : 'bg-card/80'}`}
+                className={`gap-3 border-border/70 p-3 transition-all duration-200 ease-in-out hover:border-primary/50 ${active ? 'border-primary/60 bg-primary/5 shadow-md shadow-primary/5' : 'bg-card/80'}`}
             >
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
@@ -230,7 +229,7 @@ function ScoreBar({ label, value, color }: { label: string; value: number; color
 function HistoryPanel({ section, onRollback, onClose }: { section: Section; onRollback: (content: string) => void; onClose: () => void }) {
     return (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-background/70 p-4 backdrop-blur-sm">
-            <Card className="w-full max-w-md gap-4 border-border/70 bg-card p-4 shadow-2xl">
+            <Card className="w-full max-w-md gap-3 border-border/70 bg-card p-3 shadow-2xl">
                 <div className="flex items-center justify-between">
                     <h3 className="flex items-center gap-2 text-sm font-semibold">
                         <Clock3 className="h-4 w-4 text-primary" /> {section.title} 이전 판본
@@ -252,7 +251,7 @@ function HistoryPanel({ section, onRollback, onClose }: { section: Section; onRo
                                     onRollback(item.content)
                                     onClose()
                                 }}
-                                className="w-full rounded-lg border border-border/60 bg-background/40 p-4 text-left hover:border-primary/50"
+                                className="w-full rounded-lg border border-border/60 bg-background/40 p-3 text-left hover:border-primary/50"
                             >
                                 <span className="text-[10px] text-muted-foreground">
                                     {item.savedAt} · {item.content.length}자
@@ -354,7 +353,7 @@ export default function Home() {
     }
 
     return (
-        <div className="flex h-full min-h-0 w-full items-center gap-4 px-4">
+        <div className="flex h-full min-h-0 w-full items-center gap-4">
             <SidebarPanel onIdeaSelect={selectIdea} selectedIdeaId={selectedIdea?.id} selectedIdeaTitle={selectedIdea?.title} />
             <div className="flex h-full min-w-0 flex-1">
                 <TabsContent
@@ -374,6 +373,10 @@ export default function Home() {
                             </div>
                         </div>
                     </header>
+                    <div className="flex flex-col gap-1">
+                        <Separator />
+                        <Separator />
+                    </div>
                     <div className="flex shrink-0 items-center gap-2 rounded-xl border border-border/50 bg-card/70 p-2 shadow-sm">
                         <div className="flex min-w-0 flex-1 gap-2">
                             {sectionOrder.map((key) => (
@@ -381,8 +384,12 @@ export default function Home() {
                             ))}
                         </div>
                     </div>
+                    <div className="flex flex-col gap-1">
+                        <Separator />
+                        <Separator />
+                    </div>
                     <main className="grid min-h-0 flex-1 grid-cols-1 gap-4 overflow-hidden lg:grid-cols-[1.1fr_0.9fr]">
-                        <section className="scrollbar-hidden min-h-0 overflow-y-auto rounded-xl border border-border/60 bg-card/80 p-4 shadow-sm">
+                        <section className="scrollbar-hidden min-h-0 overflow-y-auto p-0">
                             <div className="flex items-start justify-between gap-4">
                                 <div>
                                     <p className="text-[11px] font-semibold text-primary">
@@ -411,8 +418,8 @@ export default function Home() {
                                     {activeSection.status === 'COMPLETED' ? `평가 등급: ${activeSection.grade} (완료)` : '보완 요망 · 평가 대기'}
                                 </span>
                             </div>
-                            <Card className="mt-4 gap-4 border-primary/20 bg-primary/5 p-4">
-                                <div className="flex items-center justify-between gap-2 text-[10px] text-muted-foreground">
+                            <Card className="mx-auto mt-4 gap-3 rounded-sm border-border/60 bg-card/80 p-3 shadow-md">
+                                <div className="flex items-center justify-between text-[10px] text-muted-foreground">
                                     <span className="flex items-center gap-1 font-semibold text-foreground">
                                         <HelpCircle className="h-3.5 w-3.5 text-primary" /> 심사관 핵심 질문
                                     </span>
@@ -426,11 +433,8 @@ export default function Home() {
                                 <span className="flex items-center gap-1 font-semibold text-foreground">
                                     <Pencil className="h-3 w-3 text-primary" /> 내용 편집 <span className="text-emerald-400">· 로컬 상태 실시간 반영</span>
                                 </span>
-                                <span>
-                                    {activeSection.charCount}자 / 권장 150~220자{' '}
-                                    <button type="button" onClick={() => setHistoryOpen(true)} className="ml-2 text-primary hover:underline">
-                                        ◷ 이전 판본
-                                    </button>
+                                <span className="font-medium text-muted-foreground">
+                                    <strong className="text-foreground">{activeSection.charCount}자</strong> / 권장 150~220자
                                 </span>
                             </div>
                             <Textarea
@@ -439,7 +443,7 @@ export default function Home() {
                                 onChange={(event) => updateContent(event.target.value)}
                                 className="mt-2 min-h-44 resize-none overflow-hidden border-border/70 bg-background/70 p-4 text-xs leading-6 transition-all duration-200 ease-in-out focus-visible:border-primary/70 focus-visible:ring-2 focus-visible:ring-primary/30"
                             />
-                            <Card className="mt-4 gap-4 border-border/40 bg-secondary/30 p-4">
+                            <Card className="mt-4 gap-3 border-border/40 bg-secondary/30 p-3">
                                 <div className="flex items-center gap-1 text-[11px] font-semibold">
                                     <FileText className="h-3.5 w-3.5 text-primary" /> 작성 및 심사 통과 가이드
                                 </div>
@@ -447,19 +451,31 @@ export default function Home() {
                                     {activeSection.recommendation} 현재 글자 수와 상태가 우측 캔버스에 즉시 반영됩니다.
                                 </p>
                             </Card>
-                            <div className="mt-4 flex flex-wrap items-center gap-2">
-                                <Button variant="outline" size="xs" className="text-[10px]" disabled={!!mockLoading} onClick={() => runMockAction('polish')}>
+                            <div className="mt-4 grid grid-cols-1 gap-2 border-t border-border/50 pt-3 sm:grid-cols-4">
+                                <Button
+                                    variant="outline"
+                                    size="xs"
+                                    className="h-8 justify-start text-[10px]"
+                                    disabled={!!mockLoading}
+                                    onClick={() => runMockAction('polish')}
+                                >
                                     {mockLoading === 'polish' ? <LoaderCircle className="h-3 w-3 animate-spin" /> : <WandSparkles className="h-3 w-3" />} AI
                                     문장 윤문
                                 </Button>
-                                <Button variant="outline" size="xs" className="text-[10px]" disabled={!!mockLoading} onClick={() => runMockAction('evidence')}>
+                                <Button
+                                    variant="outline"
+                                    size="xs"
+                                    className="h-8 justify-start text-[10px]"
+                                    disabled={!!mockLoading}
+                                    onClick={() => runMockAction('evidence')}
+                                >
                                     {mockLoading === 'evidence' ? <LoaderCircle className="h-3 w-3 animate-spin" /> : <BarChart3 className="h-3 w-3" />} 정량적
                                     근거 추천
                                 </Button>
                                 <Button
                                     variant="outline"
                                     size="xs"
-                                    className="text-[10px]"
+                                    className="h-8 justify-start text-[10px]"
                                     disabled={!!mockLoading}
                                     onClick={() => runMockAction('competitor')}
                                 >
@@ -469,7 +485,7 @@ export default function Home() {
                                 <Button
                                     variant="ghost"
                                     size="xs"
-                                    className="text-[10px] text-destructive"
+                                    className="h-8 justify-start text-[10px] text-destructive"
                                     onClick={() => {
                                         dispatch({ type: 'reset', key: state.activeKey })
                                         setSaveState('DIRTY')
@@ -477,8 +493,10 @@ export default function Home() {
                                 >
                                     <Trash2 className="h-3 w-3" /> 내용 비우기
                                 </Button>
+                            </div>
+                            <div className="flex items-center justify-end gap-3 pt-2">
                                 <span
-                                    className={`ml-auto flex items-center gap-1 text-[10px] ${saveState === 'SAVED' ? 'text-emerald-400' : 'text-amber-400'}`}
+                                    className={`mr-auto flex items-center gap-1 text-[10px] ${saveState === 'SAVED' ? 'text-emerald-400' : 'text-amber-400'}`}
                                 >
                                     {saveState === 'SAVED' ? <Check className="h-3 w-3" /> : <Save className="h-3 w-3" />}{' '}
                                     {saveState === 'SAVED' ? '저장됨' : saveState === 'SAVING' ? '저장 중...' : '입력 대기 중...'}
@@ -486,7 +504,7 @@ export default function Home() {
                                 <Button
                                     size="sm"
                                     disabled={saveState === 'SAVING'}
-                                    className="h-7 bg-primary px-2.5 text-[10px] text-primary-foreground"
+                                    className="h-7 bg-primary px-3 text-[10px] text-primary-foreground"
                                     onClick={completeAndNext}
                                 >
                                     {saveState === 'SAVING' ? <LoaderCircle className="h-3 w-3 animate-spin" /> : <Check className="h-3 w-3" />}{' '}
@@ -494,8 +512,8 @@ export default function Home() {
                                 </Button>
                             </div>
                         </section>
-                        <section className="scrollbar-hidden min-h-0 overflow-y-auto rounded-xl border border-border/60 bg-card/80 p-4 shadow-sm">
-                            <div className="flex items-center justify-between gap-4 border-b border-border/50 pb-4">
+                        <section className="scrollbar-hidden min-h-0 overflow-y-auto p-0">
+                            <div className="mb-3 flex items-start justify-between gap-4 border-b border-border/50 px-1 pb-3">
                                 <div>
                                     <h2 className="flex items-center gap-2 text-sm font-bold">
                                         <span className="flex h-6 w-6 items-center justify-center rounded-md border border-primary/40 bg-primary/10 text-primary">
@@ -507,22 +525,10 @@ export default function Home() {
                                         {canvasLoading ? '선택한 섹션 구조화 중...' : '로컬 상태 실시간 동기화 중'}
                                     </p>
                                 </div>
-                                <div className="flex shrink-0 items-center gap-2">
-                                    <Badge className="border-emerald-500/30 bg-emerald-500/10 px-2 text-[10px] text-emerald-400">
+                                <div className="flex shrink-0 items-start gap-2">
+                                    <Badge className="self-start border-emerald-500/30 bg-emerald-500/10 px-2 text-[10px] text-emerald-400">
                                         <Gauge className="h-3 w-3" /> 적합도 {score}점 · {score >= 94 ? 'A+' : 'A'}
                                     </Badge>
-                                    <Button
-                                        size="sm"
-                                        disabled={feedbackLoading}
-                                        onClick={openFeedback}
-                                        className="h-7 bg-primary px-2.5 text-[10px] text-primary-foreground hover:bg-primary/90"
-                                    >
-                                        {feedbackLoading ? <LoaderCircle className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
-                                        {feedbackLoading ? '분석 중...' : 'AI 종합 피드백'}
-                                    </Button>
-                                    <Button variant="ghost" size="icon-xs" aria-label="새로고침">
-                                        <RotateCcw className="h-3.5 w-3.5 text-muted-foreground" />
-                                    </Button>
                                 </div>
                             </div>
                             {feedbackVisible && !feedbackLoading && (
@@ -541,7 +547,7 @@ export default function Home() {
                             {canvasLoading ? (
                                 <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
                                     {sectionOrder.map((key) => (
-                                        <Card key={key} className="gap-4 p-4">
+                                        <Card key={key} className="gap-3 p-3">
                                             <div className="flex justify-between">
                                                 <div className="h-6 w-6 animate-pulse rounded-md bg-muted" />
                                                 <div className="h-3 w-12 animate-pulse rounded-md bg-muted" />
@@ -565,7 +571,7 @@ export default function Home() {
                                 </div>
                             )}
                             {tipsLoading ? (
-                                <Card className="mt-4 gap-4 border-border/50 bg-card/80 p-4" aria-busy="true" aria-live="polite">
+                                <Card className="mt-4 gap-3 border-border/50 bg-card/80 p-3" aria-busy="true" aria-live="polite">
                                     <div className="flex items-center justify-between gap-2">
                                         <div className="h-4 w-56 animate-pulse rounded-md bg-muted" />
                                         <div className="h-5 w-24 animate-pulse rounded-md bg-muted" />
@@ -586,23 +592,44 @@ export default function Home() {
                                     </div>
                                 </Card>
                             ) : (
-                                <Card className="mt-4 animate-in gap-4 border-amber-500/20 bg-amber-500/5 p-4 duration-500 fade-in">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <h3 className="flex items-center gap-2 text-xs font-semibold">
+                                <Card className="mt-4 animate-in gap-3 border-amber-500/20 bg-amber-500/5 p-3 duration-500 fade-in">
+                                    <div className="flex items-start justify-between gap-3 border-b border-border/50 pb-3">
+                                        <h3 className="flex min-w-0 items-center gap-2 text-xs leading-5 font-semibold">
                                             <MessageSquareQuote className="h-3.5 w-3.5 text-amber-400" /> TIPS · 초기창업패키지 합격 적합도 분석
                                         </h3>
-                                        <Badge
-                                            className={`${completedCount >= 3 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-amber-500/30 bg-amber-500/10 text-amber-400'} text-[10px]`}
-                                        >
-                                            {completedCount >= 3 ? '서면통과 안정권' : '보완 후 재검토'}
-                                        </Badge>
+                                        <div className="flex shrink-0 items-center gap-2">
+                                            <Badge
+                                                className={`${completedCount >= 3 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400' : 'border-amber-500/30 bg-amber-500/10 text-amber-400'} text-[10px]`}
+                                            >
+                                                {completedCount >= 3 ? '서면통과 안정권' : '보완 후 재검토'}
+                                            </Badge>
+                                            <Button
+                                                size="xs"
+                                                disabled={feedbackLoading}
+                                                onClick={openFeedback}
+                                                className="h-6 bg-primary px-2 text-[10px] text-primary-foreground"
+                                            >
+                                                {feedbackLoading ? <LoaderCircle className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                                                {feedbackLoading ? '분석 중...' : 'AI 피드백'}
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <p className="text-[11px] leading-5 text-muted-foreground">
-                                        작성 완료 섹션 {completedCount}/4개.{' '}
-                                        {completedCount >= 3
-                                            ? 'PSST 구조의 인과관계와 실행 계획이 안정적으로 연결되어 있습니다.'
-                                            : '각 섹션을 작성 완료 처리하면 합격 적합도 분석이 갱신됩니다.'}
-                                    </p>
+                                    <ul className="space-y-2 pt-1 text-[11px] leading-5 text-muted-foreground">
+                                        <li className="flex items-start gap-2">
+                                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                                            작성 완료 섹션 {completedCount}/4개
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                                            {completedCount >= 3
+                                                ? 'PSST 구조와 실행 계획이 안정적으로 연결되어 있습니다.'
+                                                : '핵심 근거와 실행 지표를 보완하세요.'}
+                                        </li>
+                                        <li className="flex items-start gap-2">
+                                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-400" />
+                                            작성 상태와 글자 수를 기준으로 실시간 계산됩니다.
+                                        </li>
+                                    </ul>
                                     <div className="space-y-2">
                                         <ScoreBar label="논리적 완결성 (PSST)" value={Math.min(96, score)} color="bg-emerald-400" />
                                         <ScoreBar label="시장 규모 및 확장성" value={Math.min(92, score - 2)} color="bg-primary" />
