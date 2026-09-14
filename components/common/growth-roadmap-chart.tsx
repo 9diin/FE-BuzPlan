@@ -63,11 +63,11 @@ const phases = [
         label: 'Phase 2',
         theme: 'BEP 돌파',
         color: {
-            border: 'border-blue-300',
-            header: 'bg-blue-50',
-            badge: 'bg-blue-600 text-white',
-            accent: 'text-blue-700',
-            kpi: 'bg-blue-600 text-white',
+            border: 'border-neutral-400',
+            header: 'bg-neutral-200',
+            badge: 'bg-neutral-700 text-white',
+            accent: 'text-neutral-800',
+            kpi: 'bg-neutral-700 text-white',
         },
         axis: ['고객 확대', '매출 확장', '사업 고도화'],
         strategies: [
@@ -87,11 +87,11 @@ const phases = [
         label: 'Phase 3',
         theme: '스케일업',
         color: {
-            border: 'border-blue-400',
-            header: 'bg-blue-100/50',
-            badge: 'bg-blue-700 text-white',
-            accent: 'text-blue-800',
-            kpi: 'bg-blue-700 text-white',
+            border: 'border-neutral-500',
+            header: 'bg-neutral-300',
+            badge: 'bg-neutral-800 text-white',
+            accent: 'text-neutral-900',
+            kpi: 'bg-neutral-800 text-white',
         },
         axis: ['지속 성장', '수익 극대화', '글로벌 확장'],
         strategies: [
@@ -119,16 +119,16 @@ function CustomBarLabel(props: any) {
     return (
         <g transform={`translate(${x + width / 2}, ${y - 8})`}>
             <rect
-                x={isBEP ? -32 : -22}
+                x={isBEP ? -34 : -22}
                 y={-14}
-                width={isBEP ? 64 : 44}
+                width={isBEP ? 68 : 44}
                 height={16}
-                rx={2}
-                fill={isBEP ? '#fff7ed' : '#f8fafc'}
-                stroke={isBEP ? '#ea580c' : '#cbd5e1'}
+                rx={0}
+                fill={isBEP ? '#1e293b' : '#f8fafc'}
+                stroke={isBEP ? '#0f172a' : '#94a3b8'}
                 strokeWidth={1}
             />
-            <text x={0} y={-3} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={isBEP ? '#c2410c' : '#1e293b'}>
+            <text x={0} y={-3} textAnchor="middle" fontSize={8.5} fontWeight={700} fill={isBEP ? '#ffffff' : '#1e293b'}>
                 {item.keyLabel}
             </text>
         </g>
@@ -140,57 +140,54 @@ function CustomBarLabel(props: any) {
 ────────────────────────────────────────────── */
 export function GrowthRoadmapChart() {
     return (
-        <div className="flex w-full flex-col gap-0 rounded-sm border border-neutral-300 bg-white text-black">
+        <div className="flex w-full flex-col gap-0 rounded-sm border border-neutral-500 bg-white text-left text-black">
             {/* ── 도표 헤더 ── */}
-            <div className="flex items-center justify-between rounded-t-sm border-b border-neutral-300 bg-neutral-50 px-3 py-2">
-                <div className="flex items-center gap-1.5">
-                    <div className="h-3 w-3 bg-black" />
-                    <span className="font-medium">[도 3-3] 3개년 성장전략 로드맵 — 핵심 지표 성장 궤적 및 매출·손익 달성 곡선</span>
+            <div className="flex items-center justify-between rounded-t-sm border-b border-neutral-500 bg-neutral-100 px-3 py-2">
+                <div className="flex items-center gap-1.5 text-sm font-bold text-neutral-900">
+                    <div className="h-2.5 w-2.5 bg-black" />
+                    <span>[도 3-3] 3개년 성장전략 로드맵 — 핵심 지표 성장 궤적 및 매출·손익 달성 곡선</span>
                 </div>
-                <Badge className="rounded-none border border-neutral-300 bg-white px-2 py-0.5 text-[9px] font-medium text-neutral-600">
+                <span className="border border-neutral-300 bg-white px-2 py-0.5 text-[10px] font-semibold text-neutral-800">
                     기준: 2025~2027 회계연도 (단위: 억원)
-                </Badge>
+                </span>
             </div>
 
             <div className="flex flex-col gap-0 p-3">
                 {/* ── ① 4대 성장축 범례 ── */}
-                <div className="mb-2 flex items-center gap-1.5">
-                    <span className="shrink-0 text-[9px] font-semibold text-neutral-600">4대 성장축</span>
-                    <span className="text-[9px] text-neutral-300">|</span>
+                <div className="mb-2 flex items-center gap-1.5 text-left">
+                    <span className="shrink-0 text-[10px] font-bold text-neutral-800">4대 성장축</span>
+                    <span className="text-[10px] text-neutral-300">|</span>
                     {[{ label: '① 고객 확대' }, { label: '② 기술 고도화' }, { label: '③ 매출 성장' }, { label: '④ 시장 확장' }].map((ax) => (
-                        <span
-                            key={ax.label}
-                            className="rounded-none border border-neutral-300 bg-neutral-50 px-1.5 py-0.5 text-[9px] font-medium text-neutral-600"
-                        >
+                        <span key={ax.label} className="border border-neutral-300 bg-neutral-50 px-2 py-0.5 text-[9.5px] font-semibold text-neutral-700">
                             {ax.label}
                         </span>
                     ))}
                 </div>
 
                 {/* ── ② 성장 궤적 차트 ── */}
-                <div className="relative w-full overflow-hidden rounded-none border border-neutral-300 bg-white">
+                <div className="relative w-full border border-neutral-400 bg-white">
                     {/* 연도 배경 구분 및 라벨 (절대 위치, 차트 내부) */}
                     <div className="pointer-events-none absolute inset-0 top-0 bottom-[28px] flex pr-[36px] pl-[32px]">
                         {/* 2025 */}
-                        <div className="relative h-full flex-1 border-r border-dashed border-neutral-300 bg-neutral-50/40">
+                        <div className="relative h-full flex-1 border-r border-dashed border-neutral-300 bg-neutral-50/50">
                             <div className="absolute top-1.5 left-2">
-                                <span className="rounded-none border border-neutral-300 bg-white/95 px-2 py-0.5 text-[8.5px] font-bold text-neutral-700 shadow-2xs">
+                                <span className="border border-neutral-400 bg-white px-2 py-0.5 text-[9px] font-bold text-neutral-800">
                                     2025년 · Phase 1 기반실증
                                 </span>
                             </div>
                         </div>
                         {/* 2026 */}
-                        <div className="relative h-full flex-1 border-r border-dashed border-blue-200 bg-blue-50/20">
+                        <div className="relative h-full flex-1 border-r border-dashed border-neutral-400 bg-neutral-100/40">
                             <div className="absolute top-1.5 left-2">
-                                <span className="rounded-none border border-blue-200 bg-white/95 px-2 py-0.5 text-[8.5px] font-bold text-blue-700 shadow-2xs">
+                                <span className="border border-neutral-500 bg-white px-2 py-0.5 text-[9px] font-bold text-neutral-900">
                                     2026년 · Phase 2 BEP 돌파
                                 </span>
                             </div>
                         </div>
                         {/* 2027 */}
-                        <div className="relative h-full flex-1 bg-blue-50/40">
+                        <div className="relative h-full flex-1 bg-neutral-200/30">
                             <div className="absolute top-1.5 left-2">
-                                <span className="rounded-none border border-blue-300 bg-white/95 px-2 py-0.5 text-[8.5px] font-bold text-blue-800 shadow-2xs">
+                                <span className="border border-neutral-600 bg-neutral-900 px-2 py-0.5 text-[9px] font-bold text-white">
                                     2027년 · Phase 3 스케일업
                                 </span>
                             </div>
@@ -199,12 +196,12 @@ export function GrowthRoadmapChart() {
 
                     <ChartContainer config={chartConfig} className="aspect-auto h-52 w-full pt-4">
                         <ComposedChart data={chartData} margin={{ top: 24, right: 36, left: 32, bottom: 4 }} barCategoryGap="24%">
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#cbd5e1" />
                             <XAxis
                                 dataKey="quarter"
                                 tickLine={false}
-                                axisLine={{ stroke: '#cbd5e1' }}
-                                tick={{ fontSize: 8.5, fill: '#475569', fontWeight: 500 }}
+                                axisLine={{ stroke: '#64748b' }}
+                                tick={{ fontSize: 8.5, fill: '#1e293b', fontWeight: 600 }}
                                 interval={0}
                             />
                             <YAxis
@@ -212,18 +209,18 @@ export function GrowthRoadmapChart() {
                                 orientation="left"
                                 tickLine={false}
                                 axisLine={false}
-                                tick={{ fontSize: 8, fill: '#64748b' }}
+                                tick={{ fontSize: 8, fill: '#475569' }}
                                 domain={[0, 130]}
                                 tickFormatter={(v: number) => `${v}`}
                                 width={24}
                             />
 
                             {/* BEP 돌파 시점 수직선 (2026.2Q) */}
-                            <ReferenceLine yAxisId="rev" x="26.2Q" stroke="#ea580c" strokeDasharray="3 3" strokeWidth={1.2} />
+                            <ReferenceLine yAxisId="rev" x="26.2Q" stroke="#0f172a" strokeDasharray="3 3" strokeWidth={1.5} />
                             {/* 매출액 메인 막대 (Bar) */}
-                            <Bar yAxisId="rev" dataKey="revenue" isAnimationActive={false} radius={[3, 3, 0, 0]} barSize={20} label={<CustomBarLabel />}>
+                            <Bar yAxisId="rev" dataKey="revenue" isAnimationActive={false} radius={[0, 0, 0, 0]} barSize={20} label={<CustomBarLabel />}>
                                 {chartData.map((entry) => {
-                                    const fill = entry.year === '2025' ? '#60a5fa' : entry.year === '2026' ? '#2563eb' : '#1d4ed8'
+                                    const fill = entry.year === '2025' ? '#64748b' : entry.year === '2026' ? '#334155' : '#0f172a'
                                     return <Cell key={entry.quarter} fill={fill} />
                                 })}
                             </Bar>
@@ -231,19 +228,15 @@ export function GrowthRoadmapChart() {
                     </ChartContainer>
 
                     {/* 차트 하단 범례 */}
-                    <div className="flex flex-wrap items-center gap-4 border-t border-neutral-200 bg-neutral-50 px-3 py-1.5">
-                        <div className="flex items-center gap-1.5">
-                            <div className="rounded-2xs h-3 w-3 bg-blue-600" />
-                            <span className="text-[9px] font-semibold text-neutral-700">매출액 (좌축 · Bar · 억원)</span>
+                    <div className="flex flex-wrap items-center justify-between border-t border-neutral-300 bg-neutral-100 px-3 py-1.5 text-left">
+                        <div className="flex items-center gap-2">
+                            <div className="h-3 w-3 bg-neutral-800" />
+                            <span className="text-[10px] font-bold text-neutral-800">매출액 (좌축 · Bar · 억원)</span>
                         </div>
 
-                        <div className="ml-auto flex items-center gap-1.5">
-                            <span className="rounded-none border border-orange-300 bg-orange-50 px-1.5 py-0.5 text-[8.5px] font-bold text-orange-700">
-                                ★ 2026.2Q BEP 흑자전환
-                            </span>
-                            <span className="rounded-none border border-blue-300 bg-blue-50 px-2 py-0.5 text-[8.5px] font-bold text-blue-700">
-                                매출 CAGR +265%
-                            </span>
+                        <div className="flex items-center gap-2">
+                            <span className="border border-neutral-600 bg-neutral-800 px-2 py-0.5 text-[9px] font-bold text-white">★ 2026.2Q BEP 흑자전환</span>
+                            <span className="border border-neutral-400 bg-white px-2 py-0.5 text-[9px] font-bold text-neutral-900">매출 CAGR +265%</span>
                         </div>
                     </div>
                 </div>
@@ -251,26 +244,28 @@ export function GrowthRoadmapChart() {
                 {/* ── ③ 성장전략 카드 ── */}
                 <div className="mt-2.5">
                     {/* 카드 행 */}
-                    <div className="flex items-stretch gap-0">
+                    <div className="flex items-stretch gap-1.5">
                         {phases.map((ph) => (
                             <div key={ph.id} className="flex flex-1 items-stretch">
-                                <div className={`flex flex-1 flex-col overflow-hidden rounded-none border ${ph.color.border}`}>
+                                <div className="flex flex-1 flex-col border border-neutral-400 bg-white text-left">
                                     {/* 카드 헤더 */}
-                                    <div className={`${ph.color.header} border-b ${ph.color.border} px-2.5 py-1.5`}>
+                                    <div className="border-b border-neutral-400 bg-neutral-100 px-2.5 py-1.5">
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-1.5">
-                                                <span className={`rounded-none px-1.5 py-0.5 text-[9px] font-bold ${ph.color.badge}`}>{ph.label}</span>
-                                                <span className={`text-[9px] font-semibold ${ph.color.accent}`}>
+                                                <span className="border border-neutral-700 bg-neutral-800 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                                                    {ph.label}
+                                                </span>
+                                                <span className="text-[10px] font-bold text-neutral-900">
                                                     {ph.year} — {ph.theme}
                                                 </span>
                                             </div>
-                                            <span className="text-[9px] text-neutral-500">목표: {ph.revenueTarget}</span>
+                                            <span className="text-[9px] font-semibold text-neutral-600">목표: {ph.revenueTarget}</span>
                                         </div>
                                         <div className="mt-1.5 flex flex-wrap gap-1">
                                             {ph.axis.map((a) => (
                                                 <span
                                                     key={a}
-                                                    className="rounded-none border border-neutral-300 bg-white px-1 py-0 text-[9px] font-medium text-neutral-600"
+                                                    className="border border-neutral-300 bg-white px-1.5 py-0.5 text-[9px] font-medium text-neutral-700"
                                                 >
                                                     {a}
                                                 </span>
@@ -279,57 +274,53 @@ export function GrowthRoadmapChart() {
                                     </div>
 
                                     {/* 전략 리스트 */}
-                                    <div className="flex flex-1 flex-col divide-y divide-neutral-100 bg-white">
+                                    <div className="flex flex-1 flex-col divide-y divide-neutral-200 bg-white">
                                         {ph.strategies.map((st) => (
-                                            <div key={st.label} className="flex flex-col gap-0.5 px-2.5 py-1.5">
-                                                <span className="text-[9px] font-semibold text-neutral-800">▪ {st.label}</span>
-                                                <p className="line-clamp-2 h-[30px] text-justify text-[9px] leading-[15px] text-neutral-600">{st.content}</p>
+                                            <div key={st.label} className="flex flex-col gap-0.5 px-2.5 py-1.5 text-left">
+                                                <div className="flex items-center gap-1">
+                                                    <span className="h-1.5 w-1.5 shrink-0 bg-neutral-800" />
+                                                    <span className="text-[9.5px] font-bold text-neutral-900">{st.label}</span>
+                                                </div>
+                                                <p className="pl-2.5 text-left text-[9px] leading-relaxed font-medium text-neutral-700">{st.content}</p>
                                             </div>
                                         ))}
                                     </div>
 
                                     {/* KPI 푸터 */}
-                                    <div className={`border-t ${ph.color.border} ${ph.color.header} px-2.5 py-1.5`}>
+                                    <div className="border-t border-neutral-400 bg-neutral-100 px-2.5 py-1.5 text-left">
                                         <div className="flex items-center gap-1.5">
-                                            <span className={`rounded-none px-1.5 py-0.5 text-[9px] font-bold ${ph.color.kpi}`}>핵심목표</span>
-                                            <span className="text-[9.5px] font-semibold text-neutral-700">{ph.kpiValue}</span>
+                                            <span className="border border-neutral-600 bg-neutral-800 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                                                핵심목표
+                                            </span>
+                                            <span className="text-[9.5px] font-bold text-neutral-900">{ph.kpiValue}</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                {/* 화살표 */}
-                                {ph.arrow && (
-                                    <div className="flex w-5 shrink-0 items-center justify-center bg-white">
-                                        <svg width="10" height="10" viewBox="0 0 10 10" className="text-neutral-400">
-                                            <polygon points="0,0 10,5 0,10" fill="currentColor" />
-                                        </svg>
-                                    </div>
-                                )}
                             </div>
                         ))}
                     </div>
                 </div>
 
                 {/* ── ④ 성장 동력 연결 흐름 요약 ── */}
-                <div className="mt-2 flex w-full divide-x divide-neutral-200 border border-neutral-300 bg-white">
+                <div className="mt-2.5 flex w-full gap-1.5 text-left">
                     {[
-                        { step: '성장 동력', content: '온디바이스 AI · 퀵커머스 연동', sub: '기술 차별화', color: 'bg-neutral-600' },
-                        { step: '실행 전략', content: '고객 확대 → B2B 제휴 → 구독화', sub: '수익 구조 고도화', color: 'bg-blue-500' },
-                        { step: '성과 지표', content: 'BEP 돌파 · CAGR 265% · MAU 50만', sub: '2026.2Q 흑자전환', color: 'bg-blue-600' },
-                        { step: '차기 성장', content: '동남아 진출 · 멤버십 35%', sub: '글로벌 지속 성장', color: 'bg-blue-700' },
-                    ].map((item, i) => (
-                        <div key={item.step} className="flex flex-1 flex-col p-2.5">
-                            <div className="mb-2 flex items-center gap-1.5 border-b border-neutral-100 pb-1.5">
-                                <span className={`rounded-none px-1.5 py-0.5 text-[9px] font-bold text-white ${item.color}`}>{item.step}</span>
-                                <span className="text-[9px] font-semibold text-neutral-500">{item.sub}</span>
+                        { step: '성장 동력', content: '온디바이스 AI · 퀵커머스 연동', sub: '기술 차별화' },
+                        { step: '실행 전략', content: '고객 확대 → B2B 제휴 → 구독화', sub: '수익 구조 고도화' },
+                        { step: '성과 지표', content: 'BEP 돌파 · CAGR 265% · MAU 50만', sub: '2026.2Q 흑자전환' },
+                        { step: '차기 성장', content: '동남아 진출 · 멤버십 35%', sub: '글로벌 지속 성장' },
+                    ].map((item) => (
+                        <div key={item.step} className="flex flex-1 flex-col border border-neutral-400 bg-neutral-50 p-2 text-left">
+                            <div className="mb-1.5 flex items-center justify-between border-b border-neutral-300 pb-1">
+                                <span className="border border-neutral-700 bg-neutral-800 px-1.5 py-0.5 text-[9px] font-bold text-white">{item.step}</span>
+                                <span className="text-[9px] font-bold text-neutral-600">{item.sub}</span>
                             </div>
-                            <span className="text-left text-[9.5px] leading-relaxed font-semibold text-neutral-800">{item.content}</span>
+                            <span className="text-left text-[9.5px] leading-relaxed font-bold text-neutral-900">{item.content}</span>
                         </div>
                     ))}
                 </div>
 
                 {/* ── 주석 ── */}
-                <p className="mt-1.5 text-right text-[8.5px] text-neutral-400">
+                <p className="mt-3 text-right text-[8.5px] font-medium text-neutral-500">
                     ※ 영업이익은 제조원가·마케팅비·인건비 포함 기준 추정치 / BEP: Break-Even Point (손익분기점)
                 </p>
             </div>
