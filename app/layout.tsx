@@ -66,7 +66,7 @@ export default function RootLayout({
         <html lang="ko" suppressHydrationWarning className={cn('antialiased', paperlogy.variable, 'font-sans')}>
             <body>
                 <ThemeProvider defaultTheme="dark">
-                    <div className="flex h-screen w-full flex-col gap-4 overflow-hidden p-4">
+                    <div className="flex h-screen w-full flex-col gap-4 overflow-hidden bg-background p-4">
                         <Tabs defaultValue="overview" className="flex h-full w-full flex-col gap-4">
                             <AppHeader />
                             <main className="flex min-h-0 w-full flex-1">{children}</main>
